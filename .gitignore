@@ -11,10 +11,7 @@ __pycache__/
 # Statick files
 /src/static/bootstrap
 
-# Docker files
-/env
-/dockerfiles
-docker-compose.yaml
+
 
 # Distribution / packaging
 .Python
