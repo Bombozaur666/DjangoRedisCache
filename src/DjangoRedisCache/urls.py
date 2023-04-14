@@ -17,7 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+import main_backend.urls
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ping/', include())
+    path('ping/', include(main_backend.urls))
 ]
