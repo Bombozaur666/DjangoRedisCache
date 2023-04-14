@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  server:
+    container_name: django
+    build:
+      context: .
+      dockerfile: dockerfiles/server.dockerfile
+    volumes:
+      - ./src:/usr/src/app:rw
+    ports:
+      - "8000:8000"
+    depends_on:
+      - cache
+    env_file:
+      - ./env/server.env
+
+  cache:
+    container_name: redis
+    restart: always
+    build:
+      context: .
+      dockerfile: dockerfiles/cache.dockerfile
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - ./env/cache.env
