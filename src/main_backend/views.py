@@ -29,8 +29,8 @@ class Ping(View):
                 else:
                     try:
                         re = redis.Redis(host='cache', db=0)
-                        chanels = re.pubsub_channels()
-                        if url in chanels:
+                        channels = re.pubsub_channels()
+                        if url in channels:
                             conn = re.pubsub(ignore_subscribe_messages=True)
                             conn.subscribe(url)
                             conn.listen()
