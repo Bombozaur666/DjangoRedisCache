@@ -13,6 +13,8 @@ services:
       - cache
     env_file:
       - ./env/server.env
-      - /env/cache.env
+      - ./env/cache.env
   cache:
     image: "redis:alpine"
+    ports:
+      - 6379:6379
