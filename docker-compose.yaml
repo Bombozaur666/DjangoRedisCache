@@ -10,21 +10,9 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - cache
+      - redis
     env_file:
       - ./env/server.env
-
-  cache:
-    container_name: redis
-    restart: always
-    build:
-      context: .
-      dockerfile: dockerfiles/cache.dockerfile
-    ports:
-      - "6379:6379"
-    volumes:
-      - ./data:/data
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    env_file:
-      - ./env/cache.env
+      - /env/cache.env
+  redis:
+    image: "redis:alpine"
