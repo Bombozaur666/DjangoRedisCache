@@ -1,10 +1,10 @@
 import asyncio
 import json
 import httpx
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.utils.decorators import classonlymethod
 from django.views import View
-from django.core.cache import caches, cache
+from django.core.cache import cache
 
 
 class Ping(View):
