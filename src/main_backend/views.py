@@ -27,32 +27,22 @@ class Ping(View):
                 if mem:
                     return JsonResponse({"response": mem}, status=200)
                 else:
-                    try:
-                        re = redis.Redis(host='cache', db=0)
-                        channels = re.pubsub_channels()
-                        if url in channels:
-                            conn = re.pubsub(ignore_subscribe_messages=True)
-                            conn.subscribe(url)
-                            conn.listen()
-                            mem = cache.get(url)
-                            return JsonResponse({"response": mem}, status=200)
-                        else:
-                            try:
-                                async with httpx.AsyncClient() as client:
-                                    response = await client.get(url)
-                            except httpx.RequestError as erro:
-                                return JsonResponse({"error": f"An error occurred while requesting {erro.request.url!r}."},
-                                                    status=400)
-                            cache.set(url, response.text, os.environ['CACHE_TTL'])
-                            re.publish(url, 'START')
-                            return JsonResponse({"response": response.text}, status=200)
-                    except:
+                    re = redis.Redis(host='cache', db=0)
+                    channels = re.pubsub_channels()
+                    if url in channels:
+                        conn = re.pubsub(ignore_subscribe_messages=True)
+                        conn.subscribe(url)
+                        conn.listen()
+                        mem = cache.get(url)
+                        return JsonResponse({"response": mem}, status=200)
+                    else:
                         try:
                             async with httpx.AsyncClient() as client:
                                 response = await client.get(url)
                         except httpx.RequestError as erro:
-                            return JsonResponse({"error": f"An error occurred while requesting {erro.request.url!r}."}, status=400)
-                        cache.set(url, response.text, 20)
+                            return JsonResponse({"error": f"An error occurred while requesting {erro.request.url!r}."},
+                                                status=400)
+                        cache.set(url, response.text, os.environ['CACHE_TTL'])
                         re.publish(url, 'START')
                         return JsonResponse({"response": response.text}, status=200)
         return JsonResponse({"error": "Please give url"}, status=400)
