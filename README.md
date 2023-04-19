@@ -58,22 +58,9 @@ To run tests, run the following command
 
 ## API Reference
 
-#### Get all items
 
 ```http
-  GET /ping/
+  GET /whatever/you/want
 ```
 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `url` | `string` | **Required**. App will connect to this url |
-
-It should be in request Body. Here is how to add it:
-
-```json
-{
-    "url": "value"
-}
-```
-
-
+Django app will concatenate your path and `env DOMAIN` from `server.env`. The next step will be make async http request and return response.
