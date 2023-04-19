@@ -23,7 +23,7 @@ class Ping(View):
             body = json.loads(body_unicode)
             if 'url' in body:
                 url = body['url']
-                mem = cache.get(url)
+                mem = await cache.aget(url)
                 if mem:
                     return JsonResponse({"response": mem}, status=200)
                 else:
@@ -33,7 +33,7 @@ class Ping(View):
                         conn = re.pubsub(ignore_subscribe_messages=True)
                         conn.subscribe(url)
                         conn.listen()
-                        mem = cache.get(url)
+                        mem = await cache.aget(url)
                         return JsonResponse({"response": mem}, status=200)
                     else:
                         try:
@@ -42,7 +42,7 @@ class Ping(View):
                         except httpx.RequestError as erro:
                             return JsonResponse({"error": f"An error occurred while requesting {erro.request.url!r}."},
                                                 status=400)
-                        cache.set(url, response.text, os.environ['CACHE_TTL'])
+                        await cache.aset(url, response.text, os.environ['CACHE_TTL'])
                         re.publish(url, 'START')
                         return JsonResponse({"response": response.text}, status=200)
         return JsonResponse({"error": "Please give url"}, status=400)
